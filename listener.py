@@ -1,3 +1,4 @@
+# Setting up server to listen to incoming connections instead of using netcat
 # For hacker machine
 
 import socket
