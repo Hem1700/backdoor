@@ -15,7 +15,7 @@ python3 backdoor.py
 
 ## Commands
 
-All Windows/Mac Os/Linux system commands.\
+Allows you to execute all Windows/Mac Os/Linux system commands.\
 Allows you to download and upload files
 
 ### For download 
